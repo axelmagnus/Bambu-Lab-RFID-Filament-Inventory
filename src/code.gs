@@ -1,6 +1,6 @@
 const DEFAULT_SHEET_NAME = 'Inventory';
 const IMAGES_SHEET_NAME = 'Store Index';
-const UID_COLUMN_INDEX = 14; // Column N: Tag UID (hex)
+const UID_COLUMN_INDEX = 3; // Column C: Tag UID (hex)
 
 /**
  * Webhook entry: accepts JSON body with RFID scan metadata and appends to a sheet.
@@ -78,18 +78,18 @@ function appendRow(sheetId, data, imageRecord) {
   const row = [
     ts,                  // A: Timestamp
     data.code || '',     // B: Code
-    name,                // C: Name
-    color,               // D: Color
-    imageCell,           // E: Image
-    material,            // F: Material
-    variantId,           // G: VariantId
+    uid,                 // C: Tag UID (hex)
+    name,                // D: Name
+    color,               // E: Color
+    imageCell,           // F: Image
+    material,            // G: Material
+    variantId,           // H: VariantId
     data.materialId || '',
     data.trayUid || '',
     data.nozzle || '',
     data.width || '',
     data.productionDate || '',
-    data.length || '',
-    uid                  // N: Tag UID (hex)
+    data.length || ''
   ];
   const targetRow = findFirstEmptyRow(sheet); // first empty row, filling gaps if any
   console.log('appendRow -> sheet', sheet.getName(), 'writingRow', targetRow);

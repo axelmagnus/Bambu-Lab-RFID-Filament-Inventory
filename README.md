@@ -65,7 +65,7 @@ void postScan() {
 ```
 
 ## Columns written (Inventory tab)
-Timestamp | Code | Name | Color | Image (formula) | Material | VariantId | MaterialId | TrayUid | Nozzle | Width | ProductionDate | Length | TagUid
+Timestamp | Code | TagUid | Name | Color | Image (formula) | Material | VariantId | MaterialId | TrayUid | Nozzle | Width | ProductionDate | Length
 
 ## Security and privacy
 - Keep `SHEET_ID`, deployment URL, and optional `INDEX_TOKEN` out of source control.
