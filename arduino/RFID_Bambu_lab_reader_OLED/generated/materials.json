@@ -1,0 +1,1682 @@
+[
+  {
+    "material": "ABS",
+    "color": "Azure",
+    "filamentCode": "40601",
+    "variantId": "B00-B4",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Bambu Green",
+    "filamentCode": "40500",
+    "variantId": "B00-G6",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Black",
+    "filamentCode": "40101",
+    "variantId": "B00-K0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Blue",
+    "filamentCode": "40600",
+    "variantId": "B00-B0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Navy Blue",
+    "filamentCode": "40602",
+    "variantId": "B00-B6",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Olive",
+    "filamentCode": "40502",
+    "variantId": "B00-G7",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Orange",
+    "filamentCode": "40300",
+    "variantId": "B00-A0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Red",
+    "filamentCode": "40200",
+    "variantId": "B00-R0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Silver",
+    "filamentCode": "40102",
+    "variantId": "B00-D1",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "Tangerine Yellow",
+    "filamentCode": "40402",
+    "variantId": "B00-Y1",
+    "materialId": ""
+  },
+  {
+    "material": "ABS",
+    "color": "White",
+    "filamentCode": "40100",
+    "variantId": "B00-W0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Black",
+    "filamentCode": "41101",
+    "variantId": "B50-K0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Blue",
+    "filamentCode": "41600",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Gray",
+    "filamentCode": "41102",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Green",
+    "filamentCode": "41500",
+    "variantId": "B50-G0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Orange",
+    "filamentCode": "41300",
+    "variantId": "B50-A0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Red",
+    "filamentCode": "41200",
+    "variantId": "B50-R0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "White",
+    "filamentCode": "41100",
+    "variantId": "B50-W0",
+    "materialId": ""
+  },
+  {
+    "material": "ABS-GF",
+    "color": "Yellow",
+    "filamentCode": "41400",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "Black",
+    "filamentCode": "45101",
+    "variantId": "B01-K0",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "Blue",
+    "filamentCode": "45600",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "Gray",
+    "filamentCode": "45102",
+    "variantId": "B01-D0",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "Green",
+    "filamentCode": "45500",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "Red",
+    "filamentCode": "45200",
+    "variantId": "B01-R0",
+    "materialId": ""
+  },
+  {
+    "material": "ASA",
+    "color": "White",
+    "filamentCode": "45100",
+    "variantId": "B01-W0",
+    "materialId": ""
+  },
+  {
+    "material": "ASA Aero",
+    "color": "White",
+    "filamentCode": "46100",
+    "variantId": "B02-W0",
+    "materialId": ""
+  },
+  {
+    "material": "ASA-CF",
+    "color": "Black",
+    "filamentCode": "46101",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Black",
+    "filamentCode": "72104",
+    "variantId": "N08-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Blue",
+    "filamentCode": "72600",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Brown",
+    "filamentCode": "72800",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Gray",
+    "filamentCode": "72103",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Lime",
+    "filamentCode": "72500",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Orange",
+    "filamentCode": "72200",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "White",
+    "filamentCode": "72102",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PA6-GF",
+    "color": "Yellow",
+    "filamentCode": "72400",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PAHT-CF",
+    "color": "Black",
+    "filamentCode": "70100",
+    "variantId": "N04-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PC",
+    "color": "Black",
+    "filamentCode": "60101",
+    "variantId": "C00-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PC",
+    "color": "Clear Black",
+    "filamentCode": "60102",
+    "variantId": "C00-C0",
+    "materialId": ""
+  },
+  {
+    "material": "PC",
+    "color": "Transparent",
+    "filamentCode": "60103",
+    "variantId": "C00-C1",
+    "materialId": ""
+  },
+  {
+    "material": "PC",
+    "color": "White",
+    "filamentCode": "60100",
+    "variantId": "C00-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PC FR",
+    "color": "Black",
+    "filamentCode": "63100",
+    "variantId": "C01-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PC FR",
+    "color": "Gray",
+    "filamentCode": "63102",
+    "variantId": "C01-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PC FR",
+    "color": "White",
+    "filamentCode": "63101",
+    "variantId": "C01-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Black",
+    "filamentCode": "33102",
+    "variantId": "G02-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Blue",
+    "filamentCode": "33600",
+    "variantId": "G02-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Cream",
+    "filamentCode": "33401",
+    "variantId": "G02-Y1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Dark Gray",
+    "filamentCode": "33103",
+    "variantId": "G02-D1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Forest Green",
+    "filamentCode": "33502",
+    "variantId": "G02-G2",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Gray",
+    "filamentCode": "33101",
+    "variantId": "G02-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Green",
+    "filamentCode": "33500",
+    "variantId": "G02-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Lake Blue",
+    "filamentCode": "33601",
+    "variantId": "G02-B1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Lime Green",
+    "filamentCode": "33501",
+    "variantId": "G02-G1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Orange",
+    "filamentCode": "33300",
+    "variantId": "G02-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Peanut Brown",
+    "filamentCode": "33801",
+    "variantId": "G02-N1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Red",
+    "filamentCode": "33200",
+    "variantId": "G02-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "White",
+    "filamentCode": "33100",
+    "variantId": "G02-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG HF",
+    "color": "Yellow",
+    "filamentCode": "33400",
+    "variantId": "G02-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Clear",
+    "filamentCode": "32101",
+    "variantId": "G01-C0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Brown",
+    "filamentCode": "32800",
+    "variantId": "G01-N0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Gray",
+    "filamentCode": "32100",
+    "variantId": "G01-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Light Blue",
+    "filamentCode": "32600",
+    "variantId": "G01-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Olive",
+    "filamentCode": "32500",
+    "variantId": "G01-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Orange",
+    "filamentCode": "32300",
+    "variantId": "G01-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Pink",
+    "filamentCode": "32200",
+    "variantId": "G01-P1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Purple",
+    "filamentCode": "32700",
+    "variantId": "G01-P0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG Translucent",
+    "color": "Translucent Teal",
+    "filamentCode": "32501",
+    "variantId": "G01-G1",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Black",
+    "filamentCode": "31100",
+    "variantId": "G50-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Brick Red",
+    "filamentCode": "31200",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Indigo Blue",
+    "filamentCode": "31600",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Malachite Green",
+    "filamentCode": "31500",
+    "variantId": "G50-G7",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Titan Gray",
+    "filamentCode": "31101",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PETG-CF",
+    "color": "Violet Purple",
+    "filamentCode": "31700",
+    "variantId": "G50-P7",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Aero",
+    "color": "Black",
+    "filamentCode": "14103",
+    "variantId": "A11-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Aero",
+    "color": "Gray",
+    "filamentCode": "14104",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Aero",
+    "color": "White",
+    "filamentCode": "14102",
+    "variantId": "A11-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Bambu Green",
+    "filamentCode": "10501",
+    "variantId": "A00-G1/G6",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Beige",
+    "filamentCode": "10201",
+    "variantId": "A00-P0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Black",
+    "filamentCode": "10101",
+    "variantId": "A00-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Blue",
+    "filamentCode": "10601",
+    "variantId": "A09-B4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Blue Grey",
+    "filamentCode": "10602",
+    "variantId": "A00-B1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Bright Green",
+    "filamentCode": "10503",
+    "variantId": "A00-G3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Bronze",
+    "filamentCode": "10801",
+    "variantId": "A00-Y3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Brown",
+    "filamentCode": "10800",
+    "variantId": "A00-N0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Cobalt Blue",
+    "filamentCode": "10604",
+    "variantId": "A00-B3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Cocoa Brown",
+    "filamentCode": "10802",
+    "variantId": "A00-N1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Cyan",
+    "filamentCode": "10603",
+    "variantId": "A00-B8",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Dark Gray",
+    "filamentCode": "10105",
+    "variantId": "A00-D3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Gold",
+    "filamentCode": "10401",
+    "variantId": "A00-Y4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Gray",
+    "filamentCode": "10103",
+    "variantId": "A00-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Hot Pink",
+    "filamentCode": "10204",
+    "variantId": "A00-R3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Indigo Purple",
+    "filamentCode": "10701",
+    "variantId": "A00-P2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Jade White",
+    "filamentCode": "10100",
+    "variantId": "A00-W1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Light Gray",
+    "filamentCode": "10104",
+    "variantId": "A00-D2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Magenta",
+    "filamentCode": "10202",
+    "variantId": "A00-P6",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Maroon Red",
+    "filamentCode": "10205",
+    "variantId": "A00-R2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Mistletoe Green",
+    "filamentCode": "10502",
+    "variantId": "A00-G2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Orange",
+    "filamentCode": "10300",
+    "variantId": "A00-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Pink",
+    "filamentCode": "10203",
+    "variantId": "A00-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Pumpkin Orange",
+    "filamentCode": "10301",
+    "variantId": "A00-A1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Purple",
+    "filamentCode": "10700",
+    "variantId": "A00-P5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Red",
+    "filamentCode": "10200",
+    "variantId": "A00-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Silver",
+    "filamentCode": "10102",
+    "variantId": "A00-D1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Sunflower Yellow",
+    "filamentCode": "10402",
+    "variantId": "A00-Y2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Turquoise",
+    "filamentCode": "10605",
+    "variantId": "A00-B5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic",
+    "color": "Yellow",
+    "filamentCode": "10400",
+    "variantId": "A00-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Arctic Whisper",
+    "filamentCode": "10900",
+    "variantId": "A00-M0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Blueberry Bubblegum",
+    "filamentCode": "10905",
+    "variantId": "A00-M5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Cotton Candy Cloud",
+    "filamentCode": "10907",
+    "variantId": "A00-M7",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Dusk Glare",
+    "filamentCode": "10906",
+    "variantId": "A00-M6",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Mint Lime",
+    "filamentCode": "10904",
+    "variantId": "A00-M4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Ocean to Meadow",
+    "filamentCode": "10902",
+    "variantId": "A00-M2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Pink Citrus",
+    "filamentCode": "10903",
+    "variantId": "A00-M3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Basic Gradient",
+    "color": "Solar Breeze",
+    "filamentCode": "10901",
+    "variantId": "A00-M1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Galaxy",
+    "color": "Brown",
+    "filamentCode": "13203",
+    "variantId": "A15-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Galaxy",
+    "color": "Green",
+    "filamentCode": "13503",
+    "variantId": "A15-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Galaxy",
+    "color": "Nebulae",
+    "filamentCode": "13504",
+    "variantId": "A15-G1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Galaxy",
+    "color": "Purple",
+    "filamentCode": "13602",
+    "variantId": "A15-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Glow",
+    "color": "Blue",
+    "filamentCode": "15600",
+    "variantId": "A12-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Glow",
+    "color": "Green",
+    "filamentCode": "15500",
+    "variantId": "A12-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Glow",
+    "color": "Orange",
+    "filamentCode": "15300",
+    "variantId": "A12-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Glow",
+    "color": "Pink",
+    "filamentCode": "15200",
+    "variantId": "A12-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Glow",
+    "color": "Yellow",
+    "filamentCode": "15400",
+    "variantId": "A12-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Black",
+    "filamentCode": "16100",
+    "variantId": "A18-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Blue",
+    "filamentCode": "16601",
+    "variantId": "A18-B1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Cyan",
+    "filamentCode": "16600",
+    "variantId": "A18-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Gray",
+    "filamentCode": "16101",
+    "variantId": "A18-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Matte Beige",
+    "filamentCode": "16602",
+    "variantId": "A18-P0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Red",
+    "filamentCode": "16200",
+    "variantId": "A18-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "White",
+    "filamentCode": "16103",
+    "variantId": "A18-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Lite",
+    "color": "Yellow",
+    "filamentCode": "16400",
+    "variantId": "A18-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Marble",
+    "color": "Red Granite",
+    "filamentCode": "13201",
+    "variantId": "A07-R5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Marble",
+    "color": "White Marble",
+    "filamentCode": "13103",
+    "variantId": "A07-D4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Apple Green",
+    "filamentCode": "11502",
+    "variantId": "A01-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Ash Gray",
+    "filamentCode": "11102",
+    "variantId": "A01-D3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Bone White",
+    "filamentCode": "11103",
+    "variantId": "A01-W3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Caramel",
+    "filamentCode": "11803",
+    "variantId": "A01-N3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Charcoal",
+    "filamentCode": "11101",
+    "variantId": "A01-K1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Dark Blue",
+    "filamentCode": "11602",
+    "variantId": "A01-B6",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Dark Brown",
+    "filamentCode": "11801",
+    "variantId": "A01-N2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Dark Chocolate",
+    "filamentCode": "11802",
+    "variantId": "A01-N0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Dark Green",
+    "filamentCode": "11501",
+    "variantId": "A01-G7",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Dark Red",
+    "filamentCode": "11202",
+    "variantId": "A01-R4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Desert Tan",
+    "filamentCode": "11401",
+    "variantId": "A01-Y3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Grass Green",
+    "filamentCode": "11500",
+    "variantId": "A01-G1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Ice Blue",
+    "filamentCode": "11601",
+    "variantId": "A01-B4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Ivory White",
+    "filamentCode": "11100",
+    "variantId": "A01-W2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Latte Brown",
+    "filamentCode": "11800",
+    "variantId": "A01-N1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Lemon Yellow",
+    "filamentCode": "11400",
+    "variantId": "A01-Y2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Lilac Purple",
+    "filamentCode": "11700",
+    "variantId": "A01-P4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Mandarin Orange",
+    "filamentCode": "11300",
+    "variantId": "A01-A2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Marine Blue",
+    "filamentCode": "11600",
+    "variantId": "A01-B3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Nardo Gray",
+    "filamentCode": "11104",
+    "variantId": "A01-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Plum",
+    "filamentCode": "11204",
+    "variantId": "A01-R3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Sakura Pink",
+    "filamentCode": "11201",
+    "variantId": "A01-P3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Scarlet Red",
+    "filamentCode": "11200",
+    "variantId": "A01-R1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Sky Blue",
+    "filamentCode": "11603",
+    "variantId": "A01-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Matte",
+    "color": "Terracotta",
+    "filamentCode": "11203",
+    "variantId": "A01-R2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Metal",
+    "color": "Cobalt Blue Metallic",
+    "filamentCode": "13600",
+    "variantId": "A02-B2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Metal",
+    "color": "Copper Brown Metallic",
+    "filamentCode": "13800",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Metal",
+    "color": "Iridium Gold Metallic",
+    "filamentCode": "13400",
+    "variantId": "A02-Y1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Metal",
+    "color": "Iron Gray Metallic",
+    "filamentCode": "13100",
+    "variantId": "A02-D2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Metal",
+    "color": "Oxide Green Metallic",
+    "filamentCode": "13500",
+    "variantId": "A02-G2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Aurora Purple",
+    "filamentCode": "13909",
+    "variantId": "A05-M4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Blue Hawaii",
+    "filamentCode": "13904",
+    "variantId": "A05-T4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Dawn Radiance",
+    "filamentCode": "13912",
+    "variantId": "A05-M8",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Gilded Rose",
+    "filamentCode": "13901",
+    "variantId": "A05-T1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Midnight Blaze",
+    "filamentCode": "13902",
+    "variantId": "A05-T2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Mystic Magenta",
+    "filamentCode": "13913",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Neon City",
+    "filamentCode": "13903",
+    "variantId": "A05-T3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Phantom Blue",
+    "filamentCode": "13916",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "South Beach",
+    "filamentCode": "13906",
+    "variantId": "A05-M1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk Multi-Color",
+    "color": "Velvet Eclipse",
+    "filamentCode": "13905",
+    "variantId": "A05-T5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Baby Blue",
+    "filamentCode": "13603",
+    "variantId": "A06-B0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Blue",
+    "filamentCode": "13604",
+    "variantId": "A06-B1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Candy Green",
+    "filamentCode": "13506",
+    "variantId": "A06-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Candy Red",
+    "filamentCode": "13205",
+    "variantId": "A06-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Champagne",
+    "filamentCode": "13404",
+    "variantId": "A06-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Gold",
+    "filamentCode": "13405",
+    "variantId": "A06-Y1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Mint",
+    "filamentCode": "13507",
+    "variantId": "A06-G1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Pink",
+    "filamentCode": "13207",
+    "variantId": "A06-R2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Purple",
+    "filamentCode": "13702",
+    "variantId": "A06-P0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Rose Gold",
+    "filamentCode": "13206",
+    "variantId": "A06-R1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Silver",
+    "filamentCode": "13109",
+    "variantId": "A06-D1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "Titan Gray",
+    "filamentCode": "13108",
+    "variantId": "A06-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Silk+",
+    "color": "White",
+    "filamentCode": "13110",
+    "variantId": "A06-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Alpine Green Sparkle",
+    "filamentCode": "13501",
+    "variantId": "A08-G3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Classic Gold Sparkle",
+    "filamentCode": "13402",
+    "variantId": "A08-Y1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Crimson Red Sparkle",
+    "filamentCode": "13200",
+    "variantId": "A08-R2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Onyx Black Sparkle",
+    "filamentCode": "13101",
+    "variantId": "A08-K2",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Royal Purple Sparkle",
+    "filamentCode": "13700",
+    "variantId": "A08-B7",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Sparkle",
+    "color": "Slate Gray Sparkle",
+    "filamentCode": "13102",
+    "variantId": "A08-D5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Lavender Blue",
+    "filamentCode": "12005",
+    "variantId": "A09-B5",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Light Blue",
+    "filamentCode": "12004",
+    "variantId": "A09-B4",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Orange",
+    "filamentCode": "12002",
+    "variantId": "A09-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Silver",
+    "filamentCode": "12001",
+    "variantId": "A09-D1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Vermilion Red",
+    "filamentCode": "12003",
+    "variantId": "A09-R3",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough",
+    "color": "Yellow",
+    "filamentCode": "12000",
+    "variantId": "A09-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Black",
+    "filamentCode": "12104",
+    "variantId": "A10-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Cyan",
+    "filamentCode": "12601",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Gray",
+    "filamentCode": "12105",
+    "variantId": "A10-D0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Orange",
+    "filamentCode": "12301",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Silver",
+    "filamentCode": "12106",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "White",
+    "filamentCode": "12107",
+    "variantId": "A10-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Tough+",
+    "color": "Yellow",
+    "filamentCode": "12401",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Blue",
+    "filamentCode": "13611",
+    "variantId": "A17-B1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Cherry Pink",
+    "filamentCode": "13211",
+    "variantId": "A17-R1",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Ice Blue",
+    "filamentCode": "13610",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Lavender",
+    "filamentCode": "13711",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Light Jade",
+    "filamentCode": "13510",
+    "variantId": "A17-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Mellow Yellow",
+    "filamentCode": "13410",
+    "variantId": "A17-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Orange",
+    "filamentCode": "13301",
+    "variantId": "A17-A0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Purple",
+    "filamentCode": "13710",
+    "variantId": "A17-P0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Red",
+    "filamentCode": "13210",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Translucent",
+    "color": "Teal",
+    "filamentCode": "13612",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "Black Walnut",
+    "filamentCode": "13107",
+    "variantId": "A16-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "Classic Birch",
+    "filamentCode": "13505",
+    "variantId": "A16-G0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "Clay Brown",
+    "filamentCode": "13801",
+    "variantId": "A16-N0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "Ochre Yellow",
+    "filamentCode": "13403",
+    "variantId": "A16-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "Rosewood",
+    "filamentCode": "13204",
+    "variantId": "A16-R0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA Wood",
+    "color": "White Oak",
+    "filamentCode": "13106",
+    "variantId": "A16-W0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Black",
+    "filamentCode": "14100",
+    "variantId": "A50-K0",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Burgundy Red",
+    "filamentCode": "14200",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Iris Purple",
+    "filamentCode": "14700",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Jeans Blue",
+    "filamentCode": "14600",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Lava Gray",
+    "filamentCode": "14101",
+    "variantId": "A50-D6",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Matcha Green",
+    "filamentCode": "14500",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "PLA-CF",
+    "color": "Royal Blue",
+    "filamentCode": "14601",
+    "variantId": "A50-B6",
+    "materialId": ""
+  },
+  {
+    "material": "PVA",
+    "color": "Clear",
+    "filamentCode": "66400",
+    "variantId": "S04-Y0",
+    "materialId": ""
+  },
+  {
+    "material": "Support for ABS",
+    "color": "White",
+    "filamentCode": "66100",
+    "variantId": "S06-W0",
+    "materialId": ""
+  },
+  {
+    "material": "Support for PA/PET",
+    "color": "Green",
+    "filamentCode": "65500",
+    "variantId": "S03-G1",
+    "materialId": ""
+  },
+  {
+    "material": "Support for PLA (New Version)",
+    "color": "White",
+    "filamentCode": "65104",
+    "variantId": "S02-W1",
+    "materialId": ""
+  },
+  {
+    "material": "Support for PLA/PETG",
+    "color": "Black",
+    "filamentCode": "65103",
+    "variantId": "S05-C0",
+    "materialId": ""
+  },
+  {
+    "material": "Support for PLA/PETG",
+    "color": "Nature",
+    "filamentCode": "65102",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Black",
+    "filamentCode": "53101",
+    "variantId": "U02-K0",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Blue",
+    "filamentCode": "53600",
+    "variantId": "U02-B0",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Gray",
+    "filamentCode": "53102",
+    "variantId": "U02-D0",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Neon Green",
+    "filamentCode": "53500",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Red",
+    "filamentCode": "53200",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "White",
+    "filamentCode": "53100",
+    "variantId": "",
+    "materialId": ""
+  },
+  {
+    "material": "TPU for AMS",
+    "color": "Yellow",
+    "filamentCode": "53400",
+    "variantId": "",
+    "materialId": ""
+  }
+]

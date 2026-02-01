@@ -69,6 +69,16 @@ Timestamp | Code | Name | Color | Image (formula) | Material | VariantId | Mater
 - Keep `SHEET_ID`, deployment URL, and optional `INDEX_TOKEN` out of source control.
 - Web app should run as you; set access to “Anyone” only if you expect anonymous posts.
 
+## Arduino sketches
+- Included from `axelmagnus/XL_RFID_Bambu` in `arduino/`:
+  - `RFID_Bambu_lab_reader/` (serial-only RC522 reader for ESP8266 HUZZAH, LED flash)
+  - `RFID_Bambu_lab_reader_OLED/` (adds 128x32 SSD1306 OLED status display)
+- Build with `arduino-cli` (ESP8266 HUZZAH example):
+  - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino`
+  - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino`
+- Upload example: `arduino-cli upload -p /dev/cu.usbserial-<port> --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino`
+- Both sketches include `material_lookup.h` and generated `materials_snippet.h` with filament codes; extend if you add new materials.
+
 ## Publish to GitHub (manual)
 1) Create the repo on GitHub named `Bambu-Lab-RFID-Filament-Inventory` (public).
 2) In this project root:
