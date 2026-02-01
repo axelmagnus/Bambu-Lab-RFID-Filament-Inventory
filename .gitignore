@@ -1,0 +1,7 @@
+.DS_Store
+copilot-instructions.md
+.venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
