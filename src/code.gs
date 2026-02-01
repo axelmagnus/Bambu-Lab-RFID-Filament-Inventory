@@ -1,5 +1,6 @@
 const DEFAULT_SHEET_NAME = 'Inventory';
 const IMAGES_SHEET_NAME = 'Store Index';
+const UID_COLUMN_INDEX = 14; // Column N: Tag UID (hex)
 
 /**
  * Webhook entry: accepts JSON body with RFID scan metadata and appends to a sheet.
@@ -38,8 +39,8 @@ function doPost(e) {
     const imageRecord = getImageRecord(sheetId, payload.code);
     console.log('lookup imageRecord', payload.code || '', imageRecord ? imageRecord.imageUrl : '');
 
-    appendRow(sheetId, payload, imageRecord);
-    return jsonResponse(200, { ok: true });
+    const result = appendRow(sheetId, payload, imageRecord);
+    return jsonResponse(200, { ok: true, duplicate: result.duplicate, row: result.row });
   } catch (err) {
     console.error(err);
     return jsonResponse(500, { error: String(err) });
@@ -56,6 +57,15 @@ function appendRow(sheetId, data, imageRecord) {
     throw new Error(`Sheet not found: ${DEFAULT_SHEET_NAME}`);
   }
   const ts = new Date();
+
+  const uid = data.uid || data.tagUid || '';
+  if (uid) {
+    const existingRow = findRowByUid(sheet, uid);
+    if (existingRow) {
+      console.log('duplicate UID, skip append', uid, 'row', existingRow);
+      return { duplicate: true, row: existingRow };
+    }
+  }
 
   const imageUrl = imageRecord && imageRecord.imageUrl ? imageRecord.imageUrl : (data.imageUrl || '');
   const imageCell = imageUrl ? `=IMAGE("${imageUrl}")` : '';
@@ -78,11 +88,13 @@ function appendRow(sheetId, data, imageRecord) {
     data.nozzle || '',
     data.width || '',
     data.productionDate || '',
-    data.length || ''
+    data.length || '',
+    uid                  // N: Tag UID (hex)
   ];
   const targetRow = findFirstEmptyRow(sheet); // first empty row, filling gaps if any
   console.log('appendRow -> sheet', sheet.getName(), 'writingRow', targetRow);
   sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+  return { duplicate: false, row: targetRow };
 }
 
 function findFirstEmptyRow(sheet) {
@@ -98,6 +110,19 @@ function findFirstEmptyRow(sheet) {
     }
   }
   return lastRow + 1;
+}
+
+function findRowByUid(sheet, uid) {
+  const lastRow = sheet.getLastRow();
+  if (!lastRow) return null;
+  const colValues = sheet.getRange(1, UID_COLUMN_INDEX, lastRow, 1).getValues();
+  for (let i = 0; i < colValues.length; i++) {
+    const cell = String(colValues[i][0] || '').trim();
+    if (cell && cell === String(uid).trim()) {
+      return i + 1; // 1-based row
+    }
+  }
+  return null;
 }
 
 function getSheetStatus(sheetId) {

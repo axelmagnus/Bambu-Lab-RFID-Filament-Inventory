@@ -8,6 +8,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <bearssl/bearssl_hmac.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <string.h>
 #include "material_lookup.h"
 
@@ -21,6 +23,11 @@
 
 static constexpr uint8_t SS_PIN = 16; // SDA/SS moved to GPIO16 (D0)
 static constexpr uint8_t RST_PIN = 2; // RC522 RST on GPIO2 (D4)
+
+// Wi-Fi + webhook (fill with your values; keep secrets out of source control when possible)
+static const char *WIFI_SSID = "YOUR_WIFI";
+static const char *WIFI_PASS = "YOUR_PASS";
+static const char *WEBHOOK_URL = "https://script.google.com/macros/s/WEB_APP_ID/exec";
 
 static constexpr uint8_t OLED_ADDR = 0x3C; // FeatherWing OLED I2C address
 static constexpr int OLED_WIDTH = 128;
@@ -56,6 +63,7 @@ static const uint8_t HKDF_INFO[7] = {'R', 'F', 'I', 'D', '-', 'A', 0x00};
 static char lastCode[8] = "";
 static char lastName[16] = "";
 static char lastColor[16] = "";
+static char lastUid[33] = ""; // up to 16-byte UID => 32 hex chars + NUL
 static unsigned long readIndicatorUntil = 0;
 static unsigned long ledOffAt = 0;
 
@@ -166,6 +174,74 @@ static const MaterialInfo *lookupMaterial(const char *materialId, const char *va
         }
     }
     return nullptr;
+}
+
+static void uidToHexString(const byte *uid, byte uidLen, char *out, size_t outSize)
+{
+    size_t pos = 0;
+    for (byte i = 0; i < uidLen && (pos + 2) < outSize; i++)
+    {
+        int written = snprintf(out + pos, outSize - pos, "%02X", uid[i]);
+        if (written <= 0)
+            break;
+        pos += static_cast<size_t>(written);
+    }
+    out[outSize - 1] = '\0';
+}
+
+static bool ensureWifi()
+{
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        return true;
+    }
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+    unsigned long start = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - start < 10000)
+    {
+        delay(200);
+    }
+    return WiFi.status() == WL_CONNECTED;
+}
+
+static void sendScanToWebhook(const char *code, const char *uidHex)
+{
+    if (!code || !uidHex || !strlen(code) || !strlen(uidHex))
+    {
+        return;
+    }
+    if (!ensureWifi())
+    {
+        Serial.println("WiFi not connected; skipping webhook");
+        return;
+    }
+
+    WiFiClientSecure client;
+    client.setInsecure();
+    HTTPClient http;
+    if (!http.begin(client, WEBHOOK_URL))
+    {
+        Serial.println("HTTP begin failed");
+        return;
+    }
+    http.addHeader("Content-Type", "application/json");
+    String payload = String("{\"code\":\"") + code + "\",\"uid\":\"" + uidHex + "\"}";
+    int httpCode = http.POST(payload);
+    if (httpCode > 0)
+    {
+        String resp = http.getString();
+        Serial.print("Webhook POST ");
+        Serial.print(httpCode);
+        Serial.print(" resp: ");
+        Serial.println(resp);
+    }
+    else
+    {
+        Serial.print("Webhook POST failed: ");
+        Serial.println(http.errorToString(httpCode));
+    }
+    http.end();
 }
 
 static void updateDisplay()
@@ -415,12 +491,23 @@ void loop()
     printHex(rfid.uid.uidByte, rfid.uid.size);
     Serial.println();
 
+    // reset last decoded data for this scan
+    lastCode[0] = '\0';
+    lastName[0] = '\0';
+    lastColor[0] = '\0';
+    uidToHexString(rfid.uid.uidByte, rfid.uid.size, lastUid, sizeof(lastUid));
+
     MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
     // Serial.print("Type: ");
     // Serial.println(rfid.PICC_GetTypeName(piccType));
 
     deriveKeysFromUid(rfid.uid.uidByte, rfid.uid.size);
     readClassic();
+
+    if (strlen(lastCode) && lastCode[0] != '?' && strlen(lastUid))
+    {
+        sendScanToWebhook(lastCode, lastUid);
+    }
 
     readIndicatorUntil = millis() + 1000;
     digitalWrite(LED_BUILTIN, LOW);

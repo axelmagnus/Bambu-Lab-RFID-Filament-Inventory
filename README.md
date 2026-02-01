@@ -7,6 +7,7 @@ Apps Script webhook to log RFID filament scans into Google Sheets. The ESP8266/R
 - Writes the image formula in column E alongside timestamp, code, name, color, material, variantId, materialId, trayUid, nozzle, width, productionDate, and length.
 - Status probe (`{"action":"status"}`) reports sheet connectivity and a sample of recent rows for quick debugging.
 - Optional Store Index uploader token to gate scraper pushes.
+- Deduplicates by tag UID: if `uid` matches an existing row, the webhook returns `duplicate:true` and skips append.
 
 ## Setup (Apps Script)
 1) Create a new Apps Script project (or open `Extensions → Apps Script` from your target Sheet). Replace contents with [src/code.gs](src/code.gs) and [appsscript.json](appsscript.json).
@@ -17,9 +18,9 @@ Apps Script webhook to log RFID filament scans into Google Sheets. The ESP8266/R
 ## Testing
 - Status check:
   - `curl -s -X POST "$WEBHOOK" -H "Content-Type: application/json" -d '{"action":"status"}'`
-- Append a scan (uses first empty row):
-  - `curl -s -X POST "$WEBHOOK" -H "Content-Type: application/json" -d '{"code":"10503"}'`
-Response should be `{"ok":true}`; verify the row shows image in column E.
+- Append a scan (uses first empty row, dedupe by uid):
+  - `curl -s -X POST "$WEBHOOK" -H "Content-Type: application/json" -d '{"code":"10503","uid":"DEADBEEF"}'`
+Response should be `{"ok":true,"duplicate":false}`; a repeat with the same uid returns `duplicate:true` and does not add a row.
 
 ## Populate Store Index
 - Preferred: scraper pushes directly. Set `PUSH_STORE_INDEX_URL=<your /exec URL>` and `PUSH_STORE_INDEX_TOKEN=<shared token>` (optional) before running `python scripts/scrape_store.py`. The scraper will POST records into the `Store Index` tab via the webhook. You still add the Image arrayformula once in the sheet.
@@ -33,6 +34,7 @@ Response should be `{"ok":true}`; verify the row shows image in column E.
 ```json
 {
   "code": "10100",              
+  "uid": "DEADBEEF",            
   "materialId": "10100",
   "trayUid": "abcd1234",
   "nozzle": 0.4,
@@ -41,7 +43,7 @@ Response should be `{"ok":true}`; verify the row shows image in column E.
   "length": 1000
 }
 ```
-Only `code` is required; other fields are appended if present.
+`code` is required. `uid` is strongly recommended—if present, the webhook skips appending when the same UID already exists in the sheet.
 
 ## ESP8266 POST example
 ```cpp
@@ -63,7 +65,7 @@ void postScan() {
 ```
 
 ## Columns written (Inventory tab)
-Timestamp | Code | Name | Color | Image (formula) | Material | VariantId | MaterialId | TrayUid | Nozzle | Width | ProductionDate | Length
+Timestamp | Code | Name | Color | Image (formula) | Material | VariantId | MaterialId | TrayUid | Nozzle | Width | ProductionDate | Length | TagUid
 
 ## Security and privacy
 - Keep `SHEET_ID`, deployment URL, and optional `INDEX_TOKEN` out of source control.
@@ -71,8 +73,9 @@ Timestamp | Code | Name | Color | Image (formula) | Material | VariantId | Mater
 
 ## Arduino sketches
 - Included from `axelmagnus/XL_RFID_Bambu` in `arduino/`:
-  - `RFID_Bambu_lab_reader/` (serial-only RC522 reader for ESP8266 HUZZAH, LED flash)
-  - `RFID_Bambu_lab_reader_OLED/` (adds 128x32 SSD1306 OLED status display)
+  - `RFID_Bambu_lab_reader/` (serial + webhook POST)
+  - `RFID_Bambu_lab_reader_OLED/` (OLED + webhook POST)
+- Configure Wi-Fi and webhook URL in the sketches (`WIFI_SSID`, `WIFI_PASS`, `WEBHOOK_URL`). Each scan sends JSON `{ "code": "<filament code>", "uid": "<tag uid hex>" }` to the webhook; repeats with the same UID are ignored server-side.
 - Build with `arduino-cli` (ESP8266 HUZZAH example):
   - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino`
   - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino`

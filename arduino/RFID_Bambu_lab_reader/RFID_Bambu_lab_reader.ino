@@ -5,6 +5,8 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <bearssl/bearssl_hmac.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <string.h>
 #include "material_lookup.h"
 
@@ -18,6 +20,11 @@
 
 static constexpr uint8_t SS_PIN = 16; // SDA/SS moved to GPIO16 (D0)
 static constexpr uint8_t RST_PIN = 2; // RC522 RST on GPIO2 (D4)
+
+// Wi-Fi + webhook (fill in for your environment; keep secrets out of source control if possible)
+static const char *WIFI_SSID = "YOUR_WIFI";
+static const char *WIFI_PASS = "YOUR_PASS";
+static const char *WEBHOOK_URL = "https://script.google.com/macros/s/WEB_APP_ID/exec";
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -44,6 +51,11 @@ static byte SECTOR_KEY_A[16][6] = {
 
 static const uint8_t HKDF_SALT[16] = {0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff, 0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96};
 static const uint8_t HKDF_INFO[7] = {'R', 'F', 'I', 'D', '-', 'A', 0x00};
+
+static char lastCode[8] = "";
+static char lastName[16] = "";
+static char lastColor[16] = "";
+static char lastUid[33] = ""; // up to 16 bytes UID -> 32 hex chars + NUL
 
 static unsigned long ledOffAt = 0;
 
@@ -156,6 +168,74 @@ static const MaterialInfo *lookupMaterial(const char *materialId, const char *va
     return nullptr;
 }
 
+static void uidToHexString(const byte *uid, byte uidLen, char *out, size_t outSize)
+{
+    size_t pos = 0;
+    for (byte i = 0; i < uidLen && (pos + 2) < outSize; i++)
+    {
+        int written = snprintf(out + pos, outSize - pos, "%02X", uid[i]);
+        if (written <= 0)
+            break;
+        pos += static_cast<size_t>(written);
+    }
+    out[outSize - 1] = '\0';
+}
+
+static bool ensureWifi()
+{
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        return true;
+    }
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+    unsigned long start = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - start < 10000)
+    {
+        delay(200);
+    }
+    return WiFi.status() == WL_CONNECTED;
+}
+
+static void sendScanToWebhook(const char *code, const char *uidHex)
+{
+    if (!code || !uidHex || !strlen(code) || !strlen(uidHex))
+    {
+        return;
+    }
+    if (!ensureWifi())
+    {
+        Serial.println("WiFi not connected; skipping webhook");
+        return;
+    }
+
+    WiFiClientSecure client;
+    client.setInsecure();
+    HTTPClient http;
+    if (!http.begin(client, WEBHOOK_URL))
+    {
+        Serial.println("HTTP begin failed");
+        return;
+    }
+    http.addHeader("Content-Type", "application/json");
+    String payload = String("{\"code\":\"") + code + "\",\"uid\":\"" + uidHex + "\"}";
+    int httpCode = http.POST(payload);
+    if (httpCode > 0)
+    {
+        String resp = http.getString();
+        Serial.print("Webhook POST ");
+        Serial.print(httpCode);
+        Serial.print(" resp: ");
+        Serial.println(resp);
+    }
+    else
+    {
+        Serial.print("Webhook POST failed: ");
+        Serial.println(http.errorToString(httpCode));
+    }
+    http.end();
+}
+
 static void decodeKnownBlock(uint8_t block, const byte *data)
 {
     switch (block)
@@ -183,6 +263,12 @@ static void decodeKnownBlock(uint8_t block, const byte *data)
             Serial.print(variant);
             Serial.print("  Material: ");
             Serial.print(material);
+            strncpy(lastCode, info->filamentCode, sizeof(lastCode) - 1);
+            lastCode[sizeof(lastCode) - 1] = '\0';
+            strncpy(lastName, info->name, sizeof(lastName) - 1);
+            lastName[sizeof(lastName) - 1] = '\0';
+            strncpy(lastColor, info->color, sizeof(lastColor) - 1);
+            lastColor[sizeof(lastColor) - 1] = '\0';
         }
         else
         {
@@ -191,6 +277,9 @@ static void decodeKnownBlock(uint8_t block, const byte *data)
             Serial.print("  Material: ");
             Serial.print(material);
             Serial.print("  (no lookup; extend material_lookup.h)");
+            strncpy(lastCode, "?", sizeof(lastCode) - 1);
+            strncpy(lastName, material, sizeof(lastName) - 1);
+            strncpy(lastColor, variant, sizeof(lastColor) - 1);
         }
         Serial.println();
         break;
@@ -350,8 +439,19 @@ void loop()
     // Serial.print("Type: ");
     // Serial.println(rfid.PICC_GetTypeName(piccType));
 
+    // reset last decoded data for this scan
+    lastCode[0] = '\0';
+    lastName[0] = '\0';
+    lastColor[0] = '\0';
+    uidToHexString(rfid.uid.uidByte, rfid.uid.size, lastUid, sizeof(lastUid));
+
     deriveKeysFromUid(rfid.uid.uidByte, rfid.uid.size);
     readClassic();
+
+    if (strlen(lastCode) && lastCode[0] != '?' && strlen(lastUid))
+    {
+        sendScanToWebhook(lastCode, lastUid);
+    }
 
     digitalWrite(LED_BUILTIN, LOW);
     ledOffAt = millis() + 150;
