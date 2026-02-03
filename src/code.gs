@@ -1,6 +1,6 @@
 const DEFAULT_SHEET_NAME = 'Inventory';
 const IMAGES_SHEET_NAME = 'Store Index';
-const UID_COLUMN_INDEX = 3; // Column C: Tag UID (hex)
+const TRAY_UID_COLUMN_INDEX = 6; // Column F: Tray UID for roll (also holds chip UID when tray missing)
 
 /**
  * Webhook entry: accepts JSON body with RFID scan metadata and appends to a sheet.
@@ -57,15 +57,8 @@ function appendRow(sheetId, data, imageRecord) {
     throw new Error(`Sheet not found: ${DEFAULT_SHEET_NAME}`);
   }
   const ts = new Date();
-
-  const uid = data.uid || data.tagUid || '';
-  if (uid) {
-    const existingRow = findRowByUid(sheet, uid);
-    if (existingRow) {
-      console.log('duplicate UID, skip append', uid, 'row', existingRow);
-      return { duplicate: true, row: existingRow };
-    }
-  }
+  const trayUid = data.trayUid || '';
+  const chipUid = data.chipUid || data.uid || data.tagUid || '';
 
   const imageUrl = imageRecord && imageRecord.imageUrl ? imageRecord.imageUrl : (data.imageUrl || '');
   const imageCell = imageUrl ? `=IMAGE("${imageUrl}")` : '';
@@ -75,22 +68,27 @@ function appendRow(sheetId, data, imageRecord) {
   const material = data.material || (imageRecord && imageRecord.material) || '';
   const variantId = data.variantId || (imageRecord && imageRecord.variantId) || '';
 
+  const trayCellValue = trayUid || chipUid || 'Tray ID missing';
+
   const row = [
-    ts,                  // A: Timestamp
-    data.code || '',     // B: Code
-    uid,                 // C: Tag UID (hex)
-    name,                // D: Name
-    color,               // E: Color
-    imageCell,           // F: Image
-    material,            // G: Material
-    variantId,           // H: VariantId
-    data.materialId || '',
-    data.trayUid || '',
-    data.nozzle || '',
-    data.width || '',
-    data.productionDate || '',
-    data.length || ''
+    ts,                  // A: Time scanned
+    data.code || '',     // B: Filament Code
+    name || material,    // C: Type (prefer name/display; fallback to material)
+    color,               // D: Name (color / human label)
+    imageCell,           // E: Image
+    trayCellValue        // F: Tray UID for roll (or chip UID if tray missing)
   ];
+
+  const cleanTrayUid = trayUid && trayUid !== 'Tray ID missing' ? trayUid : '';
+  const dedupeKey = cleanTrayUid || chipUid;
+  if (dedupeKey) {
+    const existingRow = findRowByColumn(sheet, TRAY_UID_COLUMN_INDEX, dedupeKey);
+    if (existingRow) {
+      console.log('duplicate tray uid, update existing row', dedupeKey, 'row', existingRow);
+      sheet.getRange(existingRow, 1, 1, row.length).setValues([row]);
+      return { duplicate: true, row: existingRow, updated: true };
+    }
+  }
   const targetRow = findFirstEmptyRow(sheet); // first empty row, filling gaps if any
   console.log('appendRow -> sheet', sheet.getName(), 'writingRow', targetRow);
   sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
@@ -112,13 +110,13 @@ function findFirstEmptyRow(sheet) {
   return lastRow + 1;
 }
 
-function findRowByUid(sheet, uid) {
+function findRowByColumn(sheet, columnIndex, value) {
   const lastRow = sheet.getLastRow();
   if (!lastRow) return null;
-  const colValues = sheet.getRange(1, UID_COLUMN_INDEX, lastRow, 1).getValues();
+  const colValues = sheet.getRange(1, columnIndex, lastRow, 1).getValues();
   for (let i = 0; i < colValues.length; i++) {
     const cell = String(colValues[i][0] || '').trim();
-    if (cell && cell === String(uid).trim()) {
+    if (cell && cell === String(value).trim()) {
       return i + 1; // 1-based row
     }
   }
@@ -263,10 +261,6 @@ function importStoreIndexFromDrive(fileId) {
  * Expects: { action: 'uploadStoreIndex', token: '<shared token>', records: [ { code, name, color, imageUrl } ] }
  */
 function handleStoreIndexUpload(payload) {
-  const scriptToken = PropertiesService.getScriptProperties().getProperty('INDEX_TOKEN');
-  if (scriptToken && payload.token !== scriptToken) {
-    return jsonResponse(403, { error: 'invalid token' });
-  }
   const records = Array.isArray(payload.records) ? payload.records : [];
   if (!records.length) {
     return jsonResponse(400, { error: 'no records' });
@@ -277,8 +271,17 @@ function handleStoreIndexUpload(payload) {
   }
   const ss = SpreadsheetApp.openById(sheetId);
   const sheet = ss.getSheetByName(IMAGES_SHEET_NAME) || ss.insertSheet(IMAGES_SHEET_NAME);
-  const headers = ['Code', 'Name', 'Color', 'ImageUrl'];
-  const rows = records.map(r => [r.code || '', r.name || '', r.color || '', r.imageUrl || '']);
+  const headers = ['Code', 'Name', 'Color', 'ImageUrl', 'Image'];
+  const rows = records.map(r => {
+    const imageUrl = r.imageUrl || '';
+    return [
+      r.code || '',
+      r.name || '',
+      r.color || '',
+      imageUrl,
+      imageUrl ? `=IMAGE("${imageUrl}")` : ''
+    ];
+  });
   sheet.clearContents();
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);

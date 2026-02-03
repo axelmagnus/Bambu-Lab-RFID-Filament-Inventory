@@ -1854,15 +1854,6 @@
     "productUrl": "https://us.store.bambulab.com/products/abs-gf?id=593608094457081856"
   },
   {
-    "code": "41500",
-    "name": "ABS-GF",
-    "color": "Green",
-    "material": "ABS",
-    "variantId": "593608094457081857",
-    "imageUrl": "https://store.bblcdn.eu/s8/default/d8c7d52bf2884764bd2d47cc651c22ca/JP36184.png",
-    "productUrl": "https://us.store.bambulab.com/products/abs-gf?id=593608094457081857"
-  },
-  {
     "code": "41200",
     "name": "ABS-GF",
     "color": "Red",
@@ -1870,15 +1861,6 @@
     "variantId": "593608094457081858",
     "imageUrl": "https://store.bblcdn.eu/s8/default/6f75a6f6de344df6993108d0bc88a647/JP36182.png",
     "productUrl": "https://us.store.bambulab.com/products/abs-gf?id=593608094457081858"
-  },
-  {
-    "code": "41400",
-    "name": "ABS-GF",
-    "color": "Yellow",
-    "material": "ABS",
-    "variantId": "593608094457081859",
-    "imageUrl": "https://store.bblcdn.eu/s8/default/884764e729e0443da80159bd3a0fd2f2/JP36196.png",
-    "productUrl": "https://us.store.bambulab.com/products/abs-gf?id=593608094457081859"
   },
   {
     "code": "41600",
@@ -2050,5 +2032,86 @@
     "variantId": "593613033543643141",
     "imageUrl": "https://store.bblcdn.eu/s8/default/6c0a68b41caa409683a12e1af1de0c14/PC_White_1.jpg",
     "productUrl": "https://us.store.bambulab.com/products/pc-filament?id=593613033543643141"
+  },
+  {
+    "code": "63100",
+    "name": "PC FR",
+    "color": "Black",
+    "material": "PC",
+    "variantId": "593613054418694146",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/d327d3a6a0514c6093a376e61551c11c/3_2bfbabcc-c211-415c-926b-f5891b308048.jpg",
+    "productUrl": "https://us.store.bambulab.com/products/pc-fr?id=593613054418694146"
+  },
+  {
+    "code": "63101",
+    "name": "PC FR",
+    "color": "White",
+    "material": "PC",
+    "variantId": "593613054418694147",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/66205de6aea94b9e8d7a6292d3e7edba/2_65a3ddbd-13a9-444c-9ec8-7707acb88a62.jpg",
+    "productUrl": "https://us.store.bambulab.com/products/pc-fr?id=593613054418694147"
+  },
+  {
+    "code": "63102",
+    "name": "PC FR",
+    "color": "Gray",
+    "material": "PC",
+    "variantId": "593613054418694148",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/bb78ed96a8354b35942df858bd4b64a0/1_a71ee34c-988e-42db-b355-224daf27e489.jpg",
+    "productUrl": "https://us.store.bambulab.com/products/pc-fr?id=593613054418694148"
+  },
+  {
+    "code": "45500",
+    "name": "ASA",
+    "color": "Green",
+    "material": "ASA",
+    "variantId": "593609318933803010",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/18f6171039aa4ca484c3fb9e246a0a51/ab6743fac3b96abc3a53833a12993981.png",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803010"
+  },
+  {
+    "code": "45200",
+    "name": "ASA",
+    "color": "Red",
+    "material": "ASA",
+    "variantId": "593609318933803011",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/92149ce8869d45dba043dad18c269271/RED.png",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803011"
+  },
+  {
+    "code": "45600",
+    "name": "ASA",
+    "color": "Blue",
+    "material": "ASA",
+    "variantId": "593609318933803012",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/d8bb93139a4a4fd5b8171e0766048d5f/ASABlue.jpg",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803012"
+  },
+  {
+    "code": "45100",
+    "name": "ASA",
+    "color": "White",
+    "material": "ASA",
+    "variantId": "593609318933803013",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/c41740f7c9b1409a9a4e4302377209e2/white.png",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803013"
+  },
+  {
+    "code": "45102",
+    "name": "ASA",
+    "color": "Gray",
+    "material": "ASA",
+    "variantId": "593609318933803014",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/e5a5dbdb66ff49f787babc3a285ac0b6/gray.png",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803014"
+  },
+  {
+    "code": "45101",
+    "name": "ASA",
+    "color": "Black",
+    "material": "ASA",
+    "variantId": "593609318933803015",
+    "imageUrl": "https://store.bblcdn.eu/s8/default/3529e4af6a4b4de886ecdfd026506417/black.png",
+    "productUrl": "https://us.store.bambulab.com/products/asa-filament?id=593609318933803015"
   }
 ]

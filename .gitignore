@@ -4,4 +4,5 @@ copilot-instructions.md
 __pycache__/
 *.pyc
 .env
-.vscode/
+scripts/secrets.env
+arduino/secrets.h

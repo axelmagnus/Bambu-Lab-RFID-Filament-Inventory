@@ -1,5 +1,5 @@
 {
-    "timeZone": "UTC",
+    "timeZone": "Europe/Stockholm",
     "dependencies": {},
     "exceptionLogging": "STACKDRIVER",
     "runtimeVersion": "V8"

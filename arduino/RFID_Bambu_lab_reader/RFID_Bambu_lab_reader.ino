@@ -8,6 +8,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <string.h>
+#if __has_include("secrets.h")
+#include "secrets.h"
+#endif
 #include "material_lookup.h"
 
 // Pin mapping (ESP8266 Arduino numbers, not Dx labels):
@@ -18,13 +21,20 @@
 // MISO    -> 12 (GPIO12, D6)
 // 3.3V and GND only; do NOT feed the RC522 with 5V.
 
-static constexpr uint8_t SS_PIN = 16; // SDA/SS moved to GPIO16 (D0)
-static constexpr uint8_t RST_PIN = 2; // RC522 RST on GPIO2 (D4)
+static constexpr uint8_t SS_PIN = 16;     // SDA/SS moved to GPIO16 (D0)
+static constexpr uint8_t RST_PIN = 2;     // RC522 RST on GPIO2 (D4)
+static constexpr uint8_t BUZZER_PIN = 15; // GPIO15 (D8) passive piezo
 
 // Wi-Fi + webhook (fill in for your environment; keep secrets out of source control if possible)
-static const char *WIFI_SSID = "YOUR_WIFI";
-static const char *WIFI_PASS = "YOUR_PASS";
-static const char *WEBHOOK_URL = "https://script.google.com/macros/s/WEB_APP_ID/exec";
+#ifndef WIFI_SSID
+#define WIFI_SSID "YOUR_WIFI"
+#endif
+#ifndef WIFI_PASS
+#define WIFI_PASS "YOUR_PASS"
+#endif
+#ifndef WEB_APP_URL
+#define WEB_APP_URL "https://script.google.com/macros/s/WEB_APP_ID/exec"
+#endif
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -55,9 +65,12 @@ static const uint8_t HKDF_INFO[7] = {'R', 'F', 'I', 'D', '-', 'A', 0x00};
 static char lastCode[8] = "";
 static char lastName[16] = "";
 static char lastColor[16] = "";
-static char lastUid[33] = ""; // up to 16 bytes UID -> 32 hex chars + NUL
+static char lastUid[33] = "";     // up to 16 bytes UID -> 32 hex chars + NUL
+static char lastTrayUid[33] = ""; // Tray UID from block 9
 
 static unsigned long ledOffAt = 0;
+static const unsigned long WIFI_CONNECT_TIMEOUT_MS = 10000;
+static const char *TRAY_MISSING = "Tray UID missing";
 
 static void hkdfFromUid(const uint8_t *uid, size_t uidLen, uint8_t *out, size_t outLen)
 {
@@ -190,16 +203,40 @@ static bool ensureWifi()
     WiFi.mode(WIFI_STA);
     WiFi.begin(WIFI_SSID, WIFI_PASS);
     unsigned long start = millis();
-    while (WiFi.status() != WL_CONNECTED && millis() - start < 10000)
+    while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_CONNECT_TIMEOUT_MS)
     {
         delay(200);
     }
     return WiFi.status() == WL_CONNECTED;
 }
 
-static void sendScanToWebhook(const char *code, const char *uidHex)
+static void connectWifiAtStartup()
 {
-    if (!code || !uidHex || !strlen(code) || !strlen(uidHex))
+    Serial.print("Connecting to WiFi: ");
+    Serial.println(WIFI_SSID);
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+    unsigned long start = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - start < WIFI_CONNECT_TIMEOUT_MS)
+    {
+        delay(200);
+    }
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.print("Connected to ");
+        Serial.println(WIFI_SSID);
+        Serial.print("IP: ");
+        Serial.println(WiFi.localIP());
+    }
+    else
+    {
+        Serial.println("WiFi connect failed (will retry on send)");
+    }
+}
+
+static void sendScanToWebhook(const char *code, const char *trayUid, const char *chipUid)
+{
+    if (!code || !trayUid || !strlen(code) || !strlen(trayUid))
     {
         return;
     }
@@ -212,13 +249,20 @@ static void sendScanToWebhook(const char *code, const char *uidHex)
     WiFiClientSecure client;
     client.setInsecure();
     HTTPClient http;
-    if (!http.begin(client, WEBHOOK_URL))
+    if (!http.begin(client, WEB_APP_URL))
     {
         Serial.println("HTTP begin failed");
         return;
     }
     http.addHeader("Content-Type", "application/json");
-    String payload = String("{\"code\":\"") + code + "\",\"uid\":\"" + uidHex + "\"}";
+    String payload = String("{\"code\":\"") + code + "\",\"trayUid\":\"" + trayUid + "\"";
+    if (chipUid && strlen(chipUid))
+    {
+        payload += ",\"chipUid\":\"";
+        payload += chipUid;
+        payload += "\"";
+    }
+    payload += "}";
     int httpCode = http.POST(payload);
     if (httpCode > 0)
     {
@@ -323,6 +367,7 @@ static void decodeKnownBlock(uint8_t block, const byte *data)
         Serial.print("Tray UID: ");
         printHex((byte *)data, 16);
         Serial.println();
+        uidToHexString(data, 16, lastTrayUid, sizeof(lastTrayUid));
         break;
     case 10: // Spool width *100
         Serial.print("Spool width(mm): ");
@@ -359,43 +404,48 @@ static void decodeKnownBlock(uint8_t block, const byte *data)
 
 static void readClassic()
 {
+    // Only read the blocks we need (reduces scan time).
+    static const uint8_t TARGET_BLOCKS[] = {1, 2, 5, 6, 8, 9, 10, 12, 14, 16};
     MFRC522::MIFARE_Key key;
     byte buffer[18];
     byte size = sizeof(buffer);
 
-    for (uint8_t sector = 0; sector < 16; sector++)
+    int8_t authedSector = -1;
+    bool authOk = false;
+
+    for (size_t i = 0; i < sizeof(TARGET_BLOCKS); i++)
     {
-        memcpy(key.keyByte, SECTOR_KEY_A[sector], 6);
+        uint8_t block = TARGET_BLOCKS[i];
+        uint8_t sector = block / 4;
 
-        for (uint8_t b = 0; b < 3; b++) // skip trailer blocks (every 4th block)
+        if (sector != authedSector)
         {
-            uint8_t block = sector * 4 + b;
-
-            MFRC522::StatusCode status = rfid.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(rfid.uid));
-            if (status != MFRC522::STATUS_OK)
+            memcpy(key.keyByte, SECTOR_KEY_A[sector], 6);
+            MFRC522::StatusCode auth = rfid.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, block, &key, &(rfid.uid));
+            authOk = (auth == MFRC522::STATUS_OK);
+            authedSector = sector;
+            if (!authOk)
             {
                 Serial.print("Auth fail sector ");
                 Serial.print(sector);
-                Serial.print(" block ");
-                Serial.print(block);
                 Serial.print(": ");
-                Serial.println(rfid.GetStatusCodeName(status));
+                Serial.println(rfid.GetStatusCodeName(auth));
                 continue;
             }
-
-            size = sizeof(buffer);
-            status = rfid.MIFARE_Read(block, buffer, &size);
-            if (status != MFRC522::STATUS_OK)
-            {
-                Serial.print("Read fail block ");
-                Serial.print(block);
-                Serial.print(": ");
-                Serial.println(rfid.GetStatusCodeName(status));
-                continue;
-            }
-
-            decodeKnownBlock(block, buffer);
         }
+
+        size = sizeof(buffer);
+        MFRC522::StatusCode status = rfid.MIFARE_Read(block, buffer, &size);
+        if (status != MFRC522::STATUS_OK)
+        {
+            Serial.print("Read fail block ");
+            Serial.print(block);
+            Serial.print(": ");
+            Serial.println(rfid.GetStatusCodeName(status));
+            continue;
+        }
+
+        decodeKnownBlock(block, buffer);
     }
 }
 
@@ -411,6 +461,8 @@ void setup()
 
     SPI.begin();
     rfid.PCD_Init();
+
+    connectWifiAtStartup();
 
     Serial.println("RC522 ready. Present a Bambu Lab spool/tag...");
     rfid.PCD_DumpVersionToSerial();
@@ -443,14 +495,19 @@ void loop()
     lastCode[0] = '\0';
     lastName[0] = '\0';
     lastColor[0] = '\0';
+    strncpy(lastTrayUid, TRAY_MISSING, sizeof(lastTrayUid) - 1);
+    lastTrayUid[sizeof(lastTrayUid) - 1] = '\0';
     uidToHexString(rfid.uid.uidByte, rfid.uid.size, lastUid, sizeof(lastUid));
 
     deriveKeysFromUid(rfid.uid.uidByte, rfid.uid.size);
     readClassic();
 
-    if (strlen(lastCode) && lastCode[0] != '?' && strlen(lastUid))
+    if (strlen(lastCode) && lastCode[0] != '?' && strlen(lastTrayUid))
     {
-        sendScanToWebhook(lastCode, lastUid);
+        const bool trayMissing = (strcmp(lastTrayUid, TRAY_MISSING) == 0);
+        const char *trayToSend = trayMissing ? TRAY_MISSING : lastTrayUid;
+        const char *chipToSend = strlen(lastUid) ? lastUid : nullptr;
+        sendScanToWebhook(lastCode, trayToSend, chipToSend);
     }
 
     digitalWrite(LED_BUILTIN, LOW);

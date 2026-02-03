@@ -1,0 +1,123 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "arduino: compile (OLED)",
+            "type": "shell",
+            "command": "arduino-cli",
+            "args": [
+                "compile",
+                "--fqbn",
+                "esp8266:esp8266:huzzah",
+                "arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "arduino: compile (serial-only)",
+            "type": "shell",
+            "command": "arduino-cli",
+            "args": [
+                "compile",
+                "--fqbn",
+                "esp8266:esp8266:huzzah",
+                "arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "arduino: compile+upload (OLED)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "PORT=${input:serialPort}; echo Using port $PORT; arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino && arduino-cli upload -p \"$PORT\" --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": []
+        },
+        {
+            "label": "arduino: compile+upload (serial-only)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "PORT=${input:serialPort}; echo Using port $PORT; arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino && arduino-cli upload -p \"$PORT\" --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": []
+        },
+        {
+            "label": "arduino: list-ports",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "ls /dev/cu.usb* /dev/tty.usb* 2>/dev/null || echo 'No usb serial ports found'"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "arduino: upload (set PORT, OLED)",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "-c",
+                "PORT=\"${input:serialPort}\" && arduino-cli upload -p \"$PORT\" --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "arduino: upload (set PORT, serial-only)",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "-c",
+                "PORT=\"${input:serialPort}\" && arduino-cli upload -p \"$PORT\" --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "serialPort",
+            "type": "promptString",
+            "description": "Enter serial port (e.g. /dev/cu.usbserial-017CE95C)",
+            "default": "/dev/cu.usbserial-017CE95C"
+        }
+    ]
+}
