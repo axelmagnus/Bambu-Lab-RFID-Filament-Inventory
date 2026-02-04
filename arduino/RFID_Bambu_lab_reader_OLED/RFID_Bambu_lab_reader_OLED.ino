@@ -257,11 +257,21 @@ static void connectWifiAtStartup()
     }
 }
 
-static void playScanTone()
+static void playScanTone(bool trayMissing)
 {
-    tone(BUZZER_PIN, 900, 120);
-    delay(150);
-    tone(BUZZER_PIN, 1200, 120);
+    if (trayMissing)
+    {
+        // Invert tone order to flag missing tray UID (high then low).
+        tone(BUZZER_PIN, 1200, 120);
+        delay(150);
+        tone(BUZZER_PIN, 900, 120);
+    }
+    else
+    {
+        tone(BUZZER_PIN, 900, 120);
+        delay(150);
+        tone(BUZZER_PIN, 1200, 120);
+    }
     delay(150);
     noTone(BUZZER_PIN);
 }
@@ -337,6 +347,7 @@ static void updateDisplay()
     display.setTextWrap(true);
 
     bool showRead = readIndicatorUntil && millis() < readIndicatorUntil;
+    const bool trayMissing = (strcmp(lastTrayUid, TRAY_MISSING) == 0);
 
     display.setTextSize(2);
     display.setCursor(0, 0);
@@ -361,21 +372,22 @@ static void updateDisplay()
     {
         char prefix[7];
         prefix[0] = '\0';
-        const char *src = (strlen(lastTrayUid) && strcmp(lastTrayUid, TRAY_MISSING) != 0) ? lastTrayUid : lastUid;
+        const char *src = (!trayMissing && strlen(lastTrayUid)) ? lastTrayUid : lastUid;
         if (src && strlen(src))
         {
             strncpy(prefix, src, 6);
             prefix[6] = '\0';
         }
-        display.print("Read");
-        if (strlen(prefix))
+
+        if (trayMissing)
         {
-            display.print(' ');
-            display.println(prefix);
+            display.println("Tray UID not decoded");
         }
         else
         {
-            display.println();
+            display.print("Read ");
+            display.print(prefix);
+            display.println("...");
         }
     }
     else if (strlen(statusLine))
@@ -631,11 +643,11 @@ void loop()
     readIndicatorUntil = millis() + 500; // show "Read" briefly (~0.5s)
     statusLine[0] = '\0';
     updateDisplay();
-    playScanTone();
+    const bool trayMissing = (strcmp(lastTrayUid, TRAY_MISSING) == 0);
+    playScanTone(trayMissing);
 
     if (strlen(lastCode) && lastCode[0] != '?' && strlen(lastTrayUid))
     {
-        const bool trayMissing = (strcmp(lastTrayUid, TRAY_MISSING) == 0);
         const char *trayToSend = trayMissing ? TRAY_MISSING : lastTrayUid;
         const char *chipToSend = strlen(lastUid) ? lastUid : nullptr;
         sendScanToWebhook(lastCode, trayToSend, chipToSend);

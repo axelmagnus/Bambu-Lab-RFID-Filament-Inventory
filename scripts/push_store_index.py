@@ -45,6 +45,7 @@ def build_payload(records: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "name": rec.get("name") or "",
                 "color": rec.get("color") or "",
                 "imageUrl": rec.get("imageUrl") or "",
+                "productUrl": rec.get("productUrl") or "",
             }
         )
     return payload

@@ -18,6 +18,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Optional
+from urllib.parse import urlparse, urlunparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -54,6 +55,18 @@ load_local_env(SECRETS_ENV)
 BASE_STORE = os.environ.get("STORE_BASE", "https://us.store.bambulab.com")
 COLLECTION_PATH = "/collections/bambu-lab-3d-printer-filament"
 PUSH_URL = os.environ.get("WEB_APP_URL")
+
+
+def normalize_product_url(url: Optional[str]) -> str:
+    """Ensure productUrl uses BASE_STORE host; handle relative paths gracefully."""
+    if not url:
+        return ""
+    base = urlparse(BASE_STORE)
+    parsed = urlparse(url)
+    if not parsed.netloc:
+        # Relative or path-only
+        return f"{BASE_STORE.rstrip('/')}/{url.lstrip('/')}"
+    return urlunparse((base.scheme or parsed.scheme or "https", base.netloc, parsed.path, parsed.params, parsed.query, parsed.fragment))
 
 
 @dataclass
@@ -94,9 +107,9 @@ def parse_product_list(html: str) -> List[Product]:
         raise RuntimeError("productList not found in collection page")
     start = html.find("[", idx)
     level = 0
-    end = None
     in_str = False
     esc = False
+    end = None
     for pos, ch in enumerate(html[start:], start):
         if esc:
             esc = False
@@ -177,7 +190,7 @@ def build_records(products: Iterable[Product]) -> List[dict]:
     for product in products:
         if not product.slug:
             continue
-        url = product.product_url or f"{BASE_STORE}/products/{product.slug}"
+        url = normalize_product_url(product.product_url) or f"{BASE_STORE}/products/{product.slug}"
         try:
             page_html = fetch(url)
             time.sleep(0.25)
@@ -201,9 +214,9 @@ def build_records(products: Iterable[Product]) -> List[dict]:
             media_files = color_data.get("mediaFiles") or product.media_files
             image_url = media_files[0] if media_files else None
             variant_id = color_data.get("propertyValueId")
-            variant_url = (
-                f"{product.product_url}?id={variant_id}" if product.product_url and variant_id else product.product_url
-            )
+            normalized_base = normalize_product_url(product.product_url)
+            # Shopify-style variant selection uses the `variant` query param; `id` can be ignored by the store.
+            variant_url = f"{normalized_base}?variant={variant_id}" if normalized_base and variant_id else normalized_base
             records.append(
                 {
                     "code": opt.code,
@@ -212,7 +225,7 @@ def build_records(products: Iterable[Product]) -> List[dict]:
                     "material": guess_material(product.name, product.slug),
                     "variantId": variant_id,
                     "imageUrl": image_url,
-                    "productUrl": variant_url,
+                    "productUrl": normalize_product_url(variant_url),
                 }
             )
     return records
@@ -298,6 +311,7 @@ def push_store_index(records: List[dict]) -> None:
                 "name": rec.get("name") or "",
                 "color": rec.get("color") or "",
                 "imageUrl": rec.get("imageUrl") or "",
+                "productUrl": rec.get("productUrl") or "",
             }
         )
     try:

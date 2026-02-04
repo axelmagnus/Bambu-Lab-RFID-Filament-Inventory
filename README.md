@@ -1,6 +1,15 @@
 # Bambu Lab RFID Filament Inventory
 
-Apps Script Web App to log RFID filament scans into Google Sheets. The ESP8266/RC522 posts the filament code plus tray/chip UID; the script enriches from a `Store Index` tab (name/color/material/variant/imageUrl) and writes an `=IMAGE(url)` formula into the Image column. It uses only `SpreadsheetApp`—no external fetches. There is also a script to scrape the Bambu Store.
+Apps Script Web App/Arduino code to log RFID filament scans into a Google Sheet to keep track of your filaments. The ESP8266/RC522 posts the filament code plus tray/chip UID; the script enriches from a `Store Index` tab (name/color/material/variant/imageUrl) and displays an image of the material in the Image column. It uses only `SpreadsheetApp`—no external fetches. There is also a script to scrape the Bambu Store.
+
+<table>
+  <tr>
+    <td><img src="assets/Inventory%20example.png" alt="Inventory sheet example" width="520" /></td>
+    <td style="vertical-align: top; padding-left: 12px;">
+      <img src="assets/RFID scanner.jpg" alt="RFID, OLED, Buzzer" width="260" /><br />
+    </td>
+  </tr>
+</table>
 
 ## Features
 - Appends to the first empty row (fills gaps) on the `Inventory` tab.
@@ -9,11 +18,11 @@ Apps Script Web App to log RFID filament scans into Google Sheets. The ESP8266/R
 - Deduplicates by tray UID (or chip UID if tray missing). Matching rows are updated in place with fresh data and timestamp, returning `duplicate:true`.
 
 ## Setup (Apps Script)
-1) Create a new Google Sheet with two tabs: rename the first tab to `Inventory` and add a second tab named `Store Index`.
+1) Create a new Google Sheet with two tabs: rename the first tab to `Inventory` and add a second tab named `Store Index`. 
 2) Open the Apps Script editor: in the Sheet, click `Extensions → Apps Script`. In the left file tree, delete any starter files. Add a file named `code.gs` and paste [src/code.gs](src/code.gs). Click the gear icon (Project Settings) and toggle on “Show "appsscript.json" manifest file”; a file named `appsscript.json` will appear—open it and replace its contents with [appsscript.json](appsscript.json).
-3) Set Script Properties (done inside the Apps Script editor): click the gear icon (Project Settings) → `Script properties` → `Add script property`. Add `SHEET_ID=<your sheet id>` (required, keep private) — find it in your sheet URL `https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit`. If your `Inventory` tab is renamed, change `DEFAULT_SHEET_NAME` in code.gs.
-4) Ensure the `Store Index` tab has headers `Code`, `Name`, `Color`, `ImageUrl`, `Image` in row 1. (Populating options are in “Populate Store Index” below.)
-5) Deploy the web app: click `Deploy → New deployment` → `Select type: Web app`. Set `Execute as: Me` and `Who has access: Anyone`. Click Deploy, authorize when prompted, then copy the Web App URL ending in `/exec`; set this as `WEB_APP_URL` in your local `arduino/secrets.h`, where you also set the SSID and password.
+3) Set Script Properties (done inside the Apps Script editor): click the gear icon (Project Settings) → `Script properties` → `Add script property`. Add `SHEET_ID=<your sheet id>` (required, keep private) — find it in your sheet URL `https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit`. If your `Inventory` tab is renamed, change `DEFAULT_SHEET_NAME` in code.gs. Same goes for `Store Index`.
+4) Ensure the `Store Index` tab has headers `Code`, `Name`, `Color`, `Image`, `ProductURL` in row 1. (Populating options are in “Populate Store Index” below.)
+5) Deploy the web app: click `Deploy → New deployment` → `Select type: Web app`. Set `Execute as: Me` and `Who has access: Anyone`. Click Deploy, authorize when prompted, then copy the Web App URL ending in `/exec`; set this as `WEB_APP_URL` in your local `arduino/secrets.h` and `scripts/secrets.env`, where you also set the SSID and password while you're at it. (Repeated below).
 
 ## Testing
 - Status check:
@@ -22,12 +31,15 @@ Apps Script Web App to log RFID filament scans into Google Sheets. The ESP8266/R
   - `curl -s -X POST "$WEB_APP_URL" -H "Content-Type: application/json" -d '{"code":"10503","uid":"DEADBEEF"}'`
 Response should be `{"ok":true,"duplicate":false}`; a repeat with the same uid returns `duplicate:true` and updates that row with a fresh timestamp/payload instead of adding a new row.
 
-## Populate Store Index
+## Populate Store Index and Arduino material files
 
 - Quick, no-scrape option (recommended): use the bundled [data/store_index.json](data/store_index.json).
   - Fastest: run `python scripts/push_store_index.py` after setting `WEB_APP_URL` in `scripts/secret.env`; it uploads the bundled JSON (`data/store_index.json`) via `action:"uploadStoreIndex"`.
+  - Regenerate Arduino lookup snippets without scraping: run `python scripts/generate_material_snippets.py` (uses the same `data/store_index.json` to rewrite `arduino/**/generated/materials_snippet.h`).
+  - Store Index uploads/imports now auto-pick the formula separator based on the sheet locale (comma vs semicolon). Column D shows the image via `=IMAGE(...)`, with the raw image URL kept in column F alongside the product URL in column E.
 
-- Scrape-and-push option: set `WEB_APP_URL=<your Web App URL /exec>` (same URL used for scans) in `scripts/secret.env`, then run `python scripts/scrape_store.py`. It scrapes the store in current state, writes `data/store_index.{json,csv,tsv}`, and, if `WEB_APP_URL` is set, POSTs records to that same Web App using `action:"uploadStoreIndex"` (same endpoint, different action field). Run sparingly and respect store rate limits to avoid hammering the site. The bundled JSON already covers most filaments; if a new one appears, you can add it manually to the JSON/CSV/TSV and import without re-scraping.
+- Scrape-and-push option: set environment variables (see below), then run `python scripts/scrape_store.py`. It scrapes the store in current state, writes `data/store_index.{json,csv,tsv}`, and, if `WEB_APP_URL` is set, POSTs records to that same Web App using `action:"uploadStoreIndex"` (same endpoint, different action field). Run sparingly and respect store rate limits to avoid hammering the site. The bundled JSON already covers most filaments; if a new one appears, you can also add manually to the JSON/CSV/TSV and import without re-scraping. To create a virtual environment in order to run the scripts, see below.
+
 - Manual POST example (same Web App URL):
     ```bash
     WEB_APP_URL="https://script.google.com/macros/s/<WEB_APP_ID>/exec"
@@ -43,11 +55,24 @@ Response should be `{"ok":true,"duplicate":false}`; a repeat with the same uid r
 
 - Manual import: use the generated TSV/CSV if you prefer (File → Import into `Store Index`, in Google Sheets). The script still writes row-level IMAGE formulas when handling scans.
 
-### Scraper environment variables
-- `WEB_APP_URL`: your Apps Script Web App URL (`/exec`, same one the scanner uses). When set, the scraper posts scraped records directly to the `Store Index` tab using `action:"uploadStoreIndex"`.
+### Local Python environment for running the Python scripts
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+Keep the virtualenv out of git; it is platform-specific and large. Recreate it from `requirements.txt` when needed.
+
+### Scraper environment variables in secrets.env
+- `WEB_APP_URL`: your Apps Script Web App URL (`/exec`, same one the scanner uses). Required for uploads; no default. When set, the scraper posts scraped records directly to the `Store Index` tab using `action:"uploadStoreIndex"`.
 - `STORE_BASE`: base store URL; defaults to `https://us.store.bambulab.com`. Set to `https://eu.store.bambulab.com` for EU.
 
-Quick setup: edit `scripts/secret.env`, set `WEB_APP_URL=<your Web App URL /exec>`, and run the scraper. The script auto-loads `scripts/secret.env` if present. Shell alternative: `export WEB_APP_URL=...` then run the scraper. Set the same `WEB_APP_URL` plus Wi-Fi creds in `arduino/secrets.h`. Keep secret files untracked (gitignored).
+Quick setup: rename `scripts/secret.example.env` to `scripts/secret.env`, set `WEB_APP_URL=<your Web App URL /exec>`, and run the scraper. The script auto-loads `scripts/secret.env` if present. Shell alternative: `export WEB_APP_URL=...` then run the scraper. Set the same `WEB_APP_URL` plus Wi-Fi creds in `arduino/secrets.h`. Keep secret files untracked (gitignored).
+
+## Credits
+- RFID sector-key derivation approach based on the [Bambu Research Group RFID Tag Guide](https://github.com/Bambu-Research-Group/RFID-Tag-Guide) (deriveKeys.py).
+- Material/variant/code seeds from [queengooborg/Bambu-Lab-RFID-Library](https://github.com/queengooborg/Bambu-Lab-RFID-Library/tree/main); used its README mapping table to bootstrap the curated entries in [arduino/RFID_Bambu_lab_reader/material_lookup.h](arduino/RFID_Bambu_lab_reader/material_lookup.h).
+
 
 ## Payload shape
 ```json
@@ -79,17 +104,17 @@ void postScan() {
 ```
 
 ## Columns written (Inventory tab)
-Timestamp | Code | Type (name/material) | Image (formula) | Tray/Chip UID
+Timestamp | Code | Type (material) | Name (color) | Image (formula) | Tray/Chip UID
 
 ## Security and privacy
-- Keep `SHEET_ID` and deployment URL out of source control.
+- Keep `SHEET_ID` out of source control.
 - Web app should run as you; set access to “Anyone” only if you expect anonymous posts.
 - Web App URL (the `/exec` URL) comes from the Apps Script deployment dialog; treat it as sensitive. Wi-Fi creds and the Web App URL for the Arduino sketches should live in a local, untracked header (e.g., `arduino/secrets.h`), not in commits.
 
 ## Arduino sketches
 - `RFID_Bambu_lab_reader/` (serial + webhook POST)
 - `RFID_Bambu_lab_reader_OLED/` (OLED + webhook POST)
-- Configure Wi-Fi and Web App URL via a local header: copy `arduino/secrets.example.h` → `arduino/secrets.h` (gitignored) and set `WIFI_SSID`, `WIFI_PASS`, `WEB_APP_URL`. Each scan sends JSON `{ "code": "<filament code>", "uid": "<tag uid hex>" }` to the webhook; repeats with the same UID are ignored server-side.
+- Configure Wi-Fi and Web App URL via a local header: copy `arduino/secrets.example.h` → `arduino/secrets.h` (gitignored) and set `WIFI_SSID`, `WIFI_PASS`, `WEB_APP_URL`. Each scan sends JSON `{ "code": "<filament code>", "trayUid": "<tray uid>", "uid": "<tag uid hex>" }` to the Web App; repeats with the same UID are ignored server-side.
 - Build with `arduino-cli` (ESP8266 HUZZAH example):
   - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader/RFID_Bambu_lab_reader.ino`
   - `arduino-cli compile --fqbn esp8266:esp8266:huzzah arduino/RFID_Bambu_lab_reader_OLED/RFID_Bambu_lab_reader_OLED.ino`

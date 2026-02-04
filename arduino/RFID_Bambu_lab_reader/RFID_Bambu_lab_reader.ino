@@ -132,6 +132,25 @@ static void printHex(byte *buffer, byte bufferSize)
     }
 }
 
+static void playScanTone(bool trayMissing)
+{
+    if (trayMissing)
+    {
+        // Invert tone order to flag missing tray UID (high then low).
+        tone(BUZZER_PIN, 1200, 120);
+        delay(150);
+        tone(BUZZER_PIN, 900, 120);
+    }
+    else
+    {
+        tone(BUZZER_PIN, 900, 120);
+        delay(150);
+        tone(BUZZER_PIN, 1200, 120);
+    }
+    delay(150);
+    noTone(BUZZER_PIN);
+}
+
 static uint16_t le16(const byte *p)
 {
     return static_cast<uint16_t>(p[0]) | (static_cast<uint16_t>(p[1]) << 8);
@@ -508,6 +527,7 @@ void loop()
         const char *trayToSend = trayMissing ? TRAY_MISSING : lastTrayUid;
         const char *chipToSend = strlen(lastUid) ? lastUid : nullptr;
         sendScanToWebhook(lastCode, trayToSend, chipToSend);
+        playScanTone(trayMissing);
     }
 
     digitalWrite(LED_BUILTIN, LOW);

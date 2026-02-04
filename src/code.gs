@@ -56,12 +56,16 @@ function appendRow(sheetId, data, imageRecord) {
   if (!sheet) {
     throw new Error(`Sheet not found: ${DEFAULT_SHEET_NAME}`);
   }
+  const sep = getArgSeparator(ss);
   const ts = new Date();
   const trayUid = data.trayUid || '';
   const chipUid = data.chipUid || data.uid || data.tagUid || '';
 
   const imageUrl = imageRecord && imageRecord.imageUrl ? imageRecord.imageUrl : (data.imageUrl || '');
   const imageCell = imageUrl ? `=IMAGE("${imageUrl}")` : '';
+
+  const productUrl = (imageRecord && imageRecord.productUrl) || data.productUrl || '';
+  const codeCell = productUrl ? `=HYPERLINK("${productUrl}"${sep}"${data.code || ''}")` : (data.code || '');
 
   const name = data.name || (imageRecord && imageRecord.name) || '';
   const color = data.color || (imageRecord && imageRecord.color) || '';
@@ -72,7 +76,7 @@ function appendRow(sheetId, data, imageRecord) {
 
   const row = [
     ts,                  // A: Time scanned
-    data.code || '',     // B: Filament Code
+    codeCell,            // B: Filament Code (hyperlinked when productUrl known)
     name || material,    // C: Type (prefer name/display; fallback to material)
     color,               // D: Name (color / human label)
     imageCell,           // E: Image
@@ -168,7 +172,8 @@ function findImageRow(sheet, code) {
     color: headers.indexOf('color'),
     material: headers.indexOf('material'),
     variantId: headers.indexOf('variantid'),
-    imageUrl: headers.indexOf('imageurl')
+    imageUrl: headers.indexOf('imageurl'),
+    productUrl: headers.indexOf('producturl')
   };
   for (let i = 1; i < values.length; i++) {
     const row = values[i];
@@ -183,7 +188,8 @@ function findImageRow(sheet, code) {
         color: idx.color >= 0 ? row[idx.color] : '',
         material: idx.material >= 0 ? row[idx.material] : '',
         variantId: idx.variantId >= 0 ? row[idx.variantId] : '',
-        imageUrl: idx.imageUrl >= 0 ? row[idx.imageUrl] : ''
+        imageUrl: idx.imageUrl >= 0 ? row[idx.imageUrl] : '',
+        productUrl: idx.productUrl >= 0 ? row[idx.productUrl] : ''
       };
     }
   }
@@ -202,15 +208,24 @@ function importStoreIndexFromJson(jsonText) {
   if (!Array.isArray(data)) {
     throw new Error('jsonText must be a JSON array');
   }
-  const rows = data.map(item => [
-    item.code || '',
-    item.name || '',
-    item.color || '',
-    item.imageUrl || '',
-    item.imageUrl ? `=IMAGE("${item.imageUrl}")` : ''
-  ]);
-  const headers = ['Code', 'Name', 'Color', 'ImageUrl', 'Image'];
   const ss = SpreadsheetApp.getActive();
+  const sep = getArgSeparator(ss);
+  const rows = data.map(item => {
+    const imageUrl = item.imageUrl || '';
+    const productUrl = item.productUrl || '';
+    const code = item.code || '';
+    const codeCell = productUrl ? `=HYPERLINK("${productUrl}"${sep}"${code}")` : code;
+    const imageCell = imageUrl ? `=IMAGE("${imageUrl}")` : '';
+    return [
+      codeCell,
+      item.name || '',
+      item.color || '',
+      imageCell,
+      productUrl,
+      imageUrl
+    ];
+  });
+  const headers = ['Code', 'Name', 'Color', 'Image', 'ProductUrl', 'ImageUrl'];
   const sheet = ss.getSheetByName(IMAGES_SHEET_NAME) || ss.insertSheet(IMAGES_SHEET_NAME);
   sheet.clearContents();
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
@@ -258,7 +273,7 @@ function importStoreIndexFromDrive(fileId) {
 
 /**
  * Handle direct Store Index uploads from the scraper via POST.
- * Expects: { action: 'uploadStoreIndex', token: '<shared token>', records: [ { code, name, color, imageUrl } ] }
+ * Expects: { action: 'uploadStoreIndex', token: '<shared token>', records: [ { code, name, color, imageUrl, productUrl } ] }
  */
 function handleStoreIndexUpload(payload) {
   const records = Array.isArray(payload.records) ? payload.records : [];
@@ -271,15 +286,21 @@ function handleStoreIndexUpload(payload) {
   }
   const ss = SpreadsheetApp.openById(sheetId);
   const sheet = ss.getSheetByName(IMAGES_SHEET_NAME) || ss.insertSheet(IMAGES_SHEET_NAME);
-  const headers = ['Code', 'Name', 'Color', 'ImageUrl', 'Image'];
+  const sep = getArgSeparator(ss);
+  const headers = ['Code', 'Name', 'Color', 'Image', 'ProductUrl', 'ImageUrl'];
   const rows = records.map(r => {
     const imageUrl = r.imageUrl || '';
+    const productUrl = r.productUrl || '';
+    const code = r.code || '';
+    const codeCell = productUrl ? `=HYPERLINK("${productUrl}"${sep}"${code}")` : code;
+    const imageCell = imageUrl ? `=IMAGE("${imageUrl}")` : '';
     return [
-      r.code || '',
+      codeCell,
       r.name || '',
       r.color || '',
-      imageUrl,
-      imageUrl ? `=IMAGE("${imageUrl}")` : ''
+      imageCell,
+      productUrl,
+      imageUrl
     ];
   });
   sheet.clearContents();
@@ -323,6 +344,18 @@ function importStoreIndexFromSheetCell(sourceSheetName = 'Store Index Source', c
 
 function getSheetId() {
   return PropertiesService.getScriptProperties().getProperty('SHEET_ID');
+}
+
+function getArgSeparator(spreadsheet) {
+  try {
+    const locale = (spreadsheet && spreadsheet.getSpreadsheetLocale && spreadsheet.getSpreadsheetLocale()) || '';
+    if (locale && locale.match(/^(cs|da|de|es|fi|fr|it|nl|no|pl|pt|ru|sv|tr|hu|ro|sk|sl|hr|sr|bg|uk|et|lv|lt|is|el|he)/i)) {
+      return ';';
+    }
+  } catch (err) {
+    console.warn('arg-separator fallback to comma', err);
+  }
+  return ',';
 }
 
 function jsonResponse(_status, body) {
